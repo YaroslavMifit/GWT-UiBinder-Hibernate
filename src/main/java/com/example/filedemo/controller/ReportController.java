@@ -28,12 +28,14 @@ public class ReportController {
     @GetMapping(value = "/userDataReport", produces = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
     @ResponseBody
     public HttpEntity<byte[]> getFilterDataXlsx() throws JRException, IOException, ClassNotFoundException {
+        logger.info("Начали формировать отчет");
         final UserDataReport userDataReport = new UserDataReport(userDataService.getListUserDataFilter());
         final byte[] data = reportService.getReportXlsx(userDataReport.getReport(fileStorageService.getListUserDataFilter(2)));
 
         HttpHeaders header = new HttpHeaders();
         header.setContentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
         header.set(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=userDataReport.xlsx");
+        logger.info("Успешно сформировали отчет");
         header.setContentLength(data.length);
 
         return new HttpEntity<byte[]>(data, header);

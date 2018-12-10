@@ -1,8 +1,5 @@
 package com.example.filedemo.model;
 
-
-import com.example.filedemo.model.CreditOrganization;
-import com.example.filedemo.model.Score;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;

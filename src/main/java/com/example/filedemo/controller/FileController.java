@@ -30,8 +30,9 @@ public class FileController {
     public ResponseEntity<Void> saveFilterData(@RequestParam("creditOrganizationId") List<Long> creditOrganizationId,
                                                @RequestParam("scoreId") List<Long> scoreId,
                                                @RequestParam("userDataTitle") List<Long> userDataTitle){
-
+        logger.info("Начали запись id сортировки в файл");
         fileStorageService.setListUserDataFilter(creditOrganizationId, scoreId, userDataTitle);
+        logger.info("Успешно завершили запись id сортировки в файл");
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 }

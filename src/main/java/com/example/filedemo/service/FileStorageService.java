@@ -12,6 +12,8 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -27,7 +29,7 @@ import java.util.List;
 
 @Service
 public class FileStorageService {
-
+    private static final Logger logger = LoggerFactory.getLogger(FileStorageService.class);
     private final Path fileStorageLocation;
 
     @Autowired
@@ -52,6 +54,7 @@ public class FileStorageService {
     }
 
     public CheckBoxResponse storeFile(MultipartFile file) {
+        logger.info("Начали разархивацию RAR файла");
         cleanDirectory();
         // Normalize file name
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
@@ -88,7 +91,7 @@ public class FileStorageService {
             scoreService.saveFileInDataBase(this.fileStorageLocation.resolve("NAMES.xlsx").toString(), checkBoxResponse);
             creditOrganizationService.saveFileInDataBase(this.fileStorageLocation.resolve("092018N1.xlsx").toString(), checkBoxResponse);
             userDataService.saveFileInDataBase(this.fileStorageLocation.resolve("092018B1.xlsx").toString(), checkBoxResponse);
-
+            logger.info("Успешно разархивировали RAR файла и записали файлы в базу");
             return checkBoxResponse;
         } catch (IOException  ex) {
             cleanDirectory();
@@ -100,6 +103,7 @@ public class FileStorageService {
 
     public void setListUserDataFilter(List<Long> creditOrganizationId, List<Long> scoreId, List<Long> userDataTitle) {
         cleanDirectory();
+        logger.info("Начали запись фильтров в файл");
         try (Workbook book = new XSSFWorkbook()) {
             Sheet sheet = book.createSheet("Data");
             Row row0 = sheet.createRow(0);
@@ -118,6 +122,7 @@ public class FileStorageService {
 
             book.write(new FileOutputStream(this.fileStorageLocation.resolve("ListUserDataFilter.xlsx").toString()));
             book.close();
+            logger.info("Успешно записали фильтры в файл");
         } catch (IOException ex) {
             cleanDirectory();
             throw new FileStorageException("Could not store file ListUserDataFilter.xlsx. Please try again!", ex);
@@ -125,6 +130,7 @@ public class FileStorageService {
     }
 
     public List<Long> getListUserDataFilter(int rowNumber) {
+        logger.info("начали получать фильтры из файла");
         try (FileInputStream excelFile = new FileInputStream(new File(this.fileStorageLocation.resolve("ListUserDataFilter.xlsx").toString()));
               XSSFWorkbook workbook = new XSSFWorkbook(excelFile)){
             List<Long> dataFilter = new ArrayList<>();
@@ -132,6 +138,8 @@ public class FileStorageService {
             for(Cell cell : row){
                 dataFilter.add((long)cell.getNumericCellValue());
             }
+
+            logger.info("Успешно получили фильтры из файла");
            return dataFilter;
         } catch (IOException ex) {
             cleanDirectory();

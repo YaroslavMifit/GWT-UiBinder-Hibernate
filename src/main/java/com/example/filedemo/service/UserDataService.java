@@ -8,6 +8,8 @@ import com.example.filedemo.repository.ScoreRepository;
 import com.example.filedemo.repository.UserDataRepository;
 import com.monitorjbl.xlsx.StreamingReader;
 import org.apache.poi.ss.usermodel.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,8 @@ import java.util.*;
 
 @Service
 public class UserDataService {
+    private static final Logger logger = LoggerFactory.getLogger(UserDataService.class);
+
     @Autowired
     private UserDataRepository userDataRepository;
 
@@ -36,7 +40,6 @@ public class UserDataService {
 
     public List<UserData> getListUserDataFilter(){
         Query query;
-
         if(fileStorageService.getListUserDataFilter(0).size() != 0 && fileStorageService.getListUserDataFilter(1).size() != 0) {
             query = entityManager.createQuery("FROM UserData WHERE creditOrganization.id IN (:creditOrganizationID) AND score.id in (:scoreID) ORDER BY creditOrganization.id");
             query.setParameter("creditOrganizationID", fileStorageService.getListUserDataFilter(0));
@@ -52,10 +55,12 @@ public class UserDataService {
         }
 
         List<UserData> userDataList = query.getResultList();
+        logger.info("Успешно достали отсортированные данные из базы");
         return userDataList;
     }
 
     public void saveFileInDataBase(String filePath, CheckBoxResponse checkBoxResponse) {
+        logger.info("Начали запись файла в базу");
         userDataRepository.deleteAll();
         try (InputStream is = new FileInputStream(new File(filePath))) {
 
@@ -95,7 +100,7 @@ public class UserDataService {
 
                 }
             userDataSet.parallelStream().forEach(x -> userDataRepository.save(x));
-
+            logger.info("Успешно записали файл в базу");
         }catch (IOException ex) {
             throw new FileStorageException("Could not store file " + filePath + ". Please try again!", ex);
         }

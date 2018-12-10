@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+        <title>Spring Boot File Upload / Download Rest API Example</title>
+        <link rel="stylesheet" href="/css/main.css" />
+    </head>
+    <body>
+        <noscript>
+            <h2>Sorry! Your browser doesn't support Javascript</h2>
+        </noscript>
+        <div class="upload-container">
+            <div class="upload-header">
+                <h2>Spring Boot File Upload / Download Rest API Example</h2>
+            </div>
+            <div class="upload-content">
+                <div class="single-upload">
+                    <h3>Upload Single File</h3>
+                    <form id="singleUploadForm" name="singleUploadForm">
+                        <input id="singleFileUploadInput" type="file" name="file" class="file-input" required />
+                        <button type="submit" class="primary submit-btn">Upload</button>
+                    </form>
+                    <div class="upload-response">
+                        <div id="singleFileUploadError"></div>
+                        <div id="singleFileUploadSuccess"></div>
+                        <div id="createJasperReportButton"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="table" >
+                <table id="dataTable1" border="1" cellpadding="0" cellspacing="0" style="width:30%;float:left">
+                    <tr>
+                       <th><INPUT id="checkBoxDataTable1" type="checkbox" name="chk[]"/></th>
+                        <th><h3>Кредитная огранизация</h3></th>
+                    </tr>
+                </table>
+                <table id="dataTable2" border="1" cellpadding="0" cellspacing="0" style="width:40%;float:left">
+                    <tr>
+                        <th><INPUT id="checkBoxDataTable2" type="checkbox" name="chk[]"/></th>
+                        <th><h3>Наименование счета второго порядка по Плану счетов</h3></th>
+                    </tr>
+                </table>
+                <table id="dataTable3" border="1" cellpadding="0" cellspacing="0" style="width:30%;float:left">
+                    <tr>
+                        <th><INPUT id="checkBoxDataTable3" type="checkbox" name="chk[]"/></th>
+                        <th><h3>Пользовательские данные</h3></th>
+                    </tr>
+                </table>
+        </div>
+        <script src="/js/main.js"></script>
+    </body>
+</html>

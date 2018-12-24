@@ -105,7 +105,7 @@ public class UserDataReport {
             report.addColumn(creditOrganizationName);
         }
         if (userDataTitle.contains(1L)) {
-            AbstractColumn scoreName = createColumn("score.scoreName", String.class, "Наименование счета второго порядка", 200, headerStyle, detailTextStyle);
+            AbstractColumn scoreName = createColumn("score.scoreName", String.class, "Наименование счета второго порядка", 300, headerStyle, detailTextStyle);
             report.addColumn(scoreName);
         }
         if (userDataTitle.contains(2L)) {

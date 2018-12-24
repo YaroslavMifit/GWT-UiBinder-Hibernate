@@ -2,8 +2,8 @@ package com.example.filedemo.controller;
 
 import com.example.filedemo.service.FileStorageService;
 import com.example.filedemo.service.ReportService;
-import com.example.filedemo.report.UserDataReport;
 import com.example.filedemo.service.UserDataService;
+import com.example.filedemo.report.UserDataReport;
 import net.sf.jasperreports.engine.JRException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +32,7 @@ public class ReportController {
         final UserDataReport userDataReport = new UserDataReport(userDataService.getListUserDataFilter());
         final byte[] data = reportService.getReportXlsx(userDataReport.getReport(fileStorageService.getListUserDataFilter(2)));
 
+        fileStorageService.cleanDirectory();
         HttpHeaders header = new HttpHeaders();
         header.setContentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
         header.set(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=userDataReport.xlsx");

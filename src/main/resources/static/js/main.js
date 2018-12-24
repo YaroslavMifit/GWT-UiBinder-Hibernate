@@ -87,18 +87,12 @@ function uploadSingleFile(file) {
                 cell2.innerHTML = response.userDataTitle[i];
             }
 
-            singleFileUploadSuccess.innerHTML = "<p><h3>All Files Uploaded Successfully</h3></p>";
-            singleFileUploadSuccess.style.display = "block";
+            getInfoSuccess("Все файлы записанны в базу успешно");
 
-            createJasperReportButton.innerHTML = "<button id=\"createJasperReportButton\" type=\"submit\" class=\"primary create-btn\">Create Jasper Report</button>"
-            createJasperReportButton.style.display = "block";
         } else {
-            singleFileUploadSuccess.style.display = "none";
-            createJasperReportButton.style.display = "none";
-            singleFileUploadError.innerHTML = (response && response.message) || "Some Error Occurred";
-            singleFileUploadError.style.display = "block";
+            getInfoException(response.message, false);
         }
-    }
+    };
 
     xhr.send(formData);
 }
@@ -108,49 +102,78 @@ function createJasperReport() {
     var setCheckedScoreId = new Set();
     var setCheckedUserDataTitle = new Set();
 
-    for (var i = 1; i < dataTable1.rows.length; i++)
-    {
-        if(dataTable1.rows[i].cells[0].children[0].checked) {
-            setCheckedCreditOrganizationId.add(dataTable1.rows[i].cells[0].children[0].name);
-        }
-    }
+    setChecked(dataTable1, setCheckedCreditOrganizationId);
+    setChecked(dataTable2, setCheckedScoreId);
+    setChecked(dataTable3, setCheckedUserDataTitle);
 
-    for (var i = 1; i < dataTable2.rows.length; i++)
-    {
-        if(dataTable2.rows[i].cells[0].children[0].checked) {
-            setCheckedScoreId.add(dataTable2.rows[i].cells[0].children[0].name);
-        }
-    }
+    if(setCheckedCreditOrganizationId.size == 0){
+        getInfoException("Выберете хотя бы одну КРЕДИТНУЮ ОРГАНИЗАЦИЮ для формирования отчета");
+    } else if(setCheckedScoreId.size == 0){
+        getInfoException("Выберете хотя бы одно НАИМЕНОВАНИЕ СЧЕТА для формирования отчета");
+    } else if(setCheckedUserDataTitle.size == 0){
+        getInfoException("Выберете хотя бы одни ПОЛЬЗОВАТЕЛЬСКИЕ ДАННЫЕ для формирования отчета");
+    } else {
 
-    for (var i = 1; i < dataTable3.rows.length; i++)
-    {
-        if(dataTable3.rows[i].cells[0].children[0].checked) {
-            setCheckedUserDataTitle.add(dataTable3.rows[i].cells[0].children[0].name);
-        }
-    }
+        getInfoAction("Пожалуйста подождите, идёт загрузка отчета");
+        var formData = new FormData();
+        formData.append("creditOrganizationId", Array.from(setCheckedCreditOrganizationId));
+        formData.append("scoreId", Array.from(setCheckedScoreId));
+        formData.append("userDataTitle", Array.from(setCheckedUserDataTitle));
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/userDataReport");
+        xhr.onload = function () {
+            console.log(xhr.responseText);
 
-    var formData = new FormData();
-    formData.append("creditOrganizationId", Array.from(setCheckedCreditOrganizationId));
-    formData.append("scoreId", Array.from(setCheckedScoreId));
-    formData.append("userDataTitle", Array.from(setCheckedUserDataTitle));
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", "/userDataReport");
-    xhr.onload = function() {
-        console.log(xhr.responseText);
-
-        if (xhr.status == 200) {
-            window.open(xhr.responseURL);
-            createJasperReportButton.innerHTML = "<button id=\"createJasperReportButton\" type=\"submit\" class=\"primary create-btn\">Create Jasper Report</button>"
-        } else {
-            createJasperReportButton.innerHTML = "Произошла ошибка, попробуйте ещё раз"
-            window.alert("Неполучилось")
-        }
+            if (xhr.status == 200) {
+                window.open(xhr.responseURL);
+                getInfoSuccess("Успешно сформировали отчет");
+            } else {
+                getInfoException("Произошла ошибка, попробуйте ещё раз", false);
+            }
+        };
+        xhr.send(formData);
     }
-    xhr.send(formData);
 }
 
-function checkAll (tableID)
-{
+function getInfoSuccess(text){
+    singleFileUploadSuccess.innerHTML ="<p><h3>" + text + "</h3></p>";
+    singleFileUploadSuccess.style.color = "#23ff59";
+    singleFileUploadSuccess.style.display = "block";
+    createJasperReportButton.innerHTML = "<button id=\"createJasperReportButton\" type=\"submit\" class=\"primary create-btn\">Создать Jasper Report</button>";
+    createJasperReportButton.style.display = "block";
+    singleFileUploadError.style.display = "none";
+}
+
+function getInfoAction(text){
+    createJasperReportButton.innerHTML = text;
+    createJasperReportButton.style.color = "#1830ff";
+    createJasperReportButton.style.display = "block";
+    singleFileUploadSuccess.style.display = "none";
+    singleFileUploadError.style.display = "none";
+}
+
+function getInfoException (text, button){
+    singleFileUploadError.innerHTML = text;
+    singleFileUploadError.style.color = "#f00";
+    if(button != false) {
+        createJasperReportButton.innerHTML = "<button id=\"createJasperReportButton\" type=\"submit\" class=\"primary create-btn\">Создать Jasper Report</button>";
+    } else {
+        createJasperReportButton.style.display = "none"
+    }
+    singleFileUploadSuccess.style.display = "none";
+    singleFileUploadError.style.display = "block";
+}
+
+function setChecked (tableID, collection){
+    for (var i = 1; i < tableID.rows.length; i++)
+    {
+        if(tableID.rows[i].cells[0].children[0].checked) {
+            collection.add(tableID.rows[i].cells[0].children[0].name);
+        }
+    }
+}
+
+function checkAll (tableID){
     var val = tableID.rows[0].cells[0].children[0].checked;
     for (var i = 1; i < tableID.rows.length; i++)
     {
@@ -171,18 +194,15 @@ checkBoxDataTable3.addEventListener('change',function(){
 });
 
 createJasperReportButton.addEventListener('click', function(){
-    createJasperReportButton.innerHTML = "Пожалуйста подождите, идёт загрузка отчета";
     createJasperReport();
 });
 
 singleUploadForm.addEventListener('submit', function(event){
-    createJasperReportButton.innerHTML = "Пожалуйста подождите, идёт загрузка файлов в базу данных";
+    getInfoAction("Пожалуйста подождите, идёт загрузка файлов в базу данных");
     var files = singleFileUploadInput.files;
-    singleFileUploadSuccess.style.display = "none";
     if(files.length === 0) {
-        createJasperReportButton.style.display = "none";
-        singleFileUploadError.innerHTML = "Please select a file";
-        singleFileUploadError.style.display = "block";
+        getInfoException("Please select a file");
+
     }
     uploadSingleFile(files[0]);
     event.preventDefault();

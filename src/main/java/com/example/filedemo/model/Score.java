@@ -19,10 +19,10 @@ public class Score {
 
     //Номер счета второго порядка по Плану счетов
     @Id
-    @Column(name = "id")
+    @Column(name = "id", nullable = false)
     private long id;
 
     //Наименование счета второго порядка
-    @Column(name = "score_name")
+    @Column(name = "score_name", nullable = false)
     private String scoreName;
 }

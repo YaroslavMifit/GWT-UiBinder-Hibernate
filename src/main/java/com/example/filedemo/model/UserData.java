@@ -3,7 +3,6 @@ package com.example.filedemo.model;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
-
 import javax.persistence.*;
 
 @Accessors(chain = true)
@@ -16,65 +15,65 @@ public class UserData {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
+    @Column(name = "id", nullable = false)
     private long id;
 
     // Файл 092018N1
     @ManyToOne
-    @JoinColumn (name="creditOrganization_id")
+    @JoinColumn (name="creditOrganization_id", nullable = false)
     private CreditOrganization creditOrganization;
 
     // Файл NAMES
     @ManyToOne
-    @JoinColumn (name="score_id")
+    @JoinColumn (name="score_id", nullable = false)
     private Score score;
 
     //Входящие остатки «в рублях», тыс. руб
     @Column(name = "incoming_balances_in_rubles")
-    private String incomingBalancesInRubles;
+    private Long incomingBalancesInRubles;
 
     //Входящие остатки «ин. вал., драг. металлы», тыс. руб
     @Column(name = "incoming_balances_drag_metals")
-    private String incomingBalancesDragMetals;
+    private Long incomingBalancesDragMetals;
 
     //Входящие остатки «итого», тыс. руб.; счета Депо – в штуках
     @Column(name = "incoming_balances_of_total")
-    private String incomingBalancesOfTotal;
+    private Double incomingBalancesOfTotal;
 
     //Обороты за отчетный период по дебету (активу) «в рублях», тыс. руб
     @Column(name = "turnovers_debit_in_rubles")
-    private String turnoversDebitInRubles;
+    private Long turnoversDebitInRubles;
 
     //Обороты за отчетный период по дебету (активу) «ин. вал., драг. металлы», тыс. руб
     @Column(name = "turnovers_debit_drag_metals")
-    private String turnoversDebitDragMetals;
+    private Long turnoversDebitDragMetals;
 
     //Обороты за отчетный период по дебету (активу) «итого», тыс. руб.; счета Депо – в штуках
     @Column(name = "turnovers_debit_of_total")
-    private String turnoversDebitOfTotal;
+    private Double turnoversDebitOfTotal;
 
     //Обороты за отчетный период по кредиту (пассиву) «в рублях», тыс. руб.
     @Column(name = "turnovers_credit_in_rubles")
-    private String turnoversCreditInRubles;
+    private Long turnoversCreditInRubles;
 
     //Обороты за отчетный период по кредиту (пассиву) «ин. вал., драг. металлы», тыс. руб.
     @Column(name = "turnovers_credit_drag_metals")
-    private String turnoversCreditDragMetals;
+    private Long turnoversCreditDragMetals;
 
     //Обороты за отчетный период по кредиту (пассиву) «итого», тыс. руб.;
     @Column(name = "turnovers_credit_of_total")
-    private String turnoversCreditOfTotal;
+    private Double turnoversCreditOfTotal;
 
     //Исходящие остатки «в рублях», тыс. руб.
     @Column(name = "outgoing_balances_in_rubles")
-    private String outgoingBalancesInRubles;
+    private Long outgoingBalancesInRubles;
 
     //Исходящие остатки «ин. вал., драг. металлы», тыс. руб.
     @Column(name = "outgoing_balances_drag_metals")
-    private String outgoingBalancesDragMetals;
+    private Long outgoingBalancesDragMetals;
 
     //Исходящие остатки «итого», тыс. руб.;
     @Column(name = "outgoing_balances_of_total")
-    private String outgoingBalancesOfTotal;
+    private Double outgoingBalancesOfTotal;
 
 }

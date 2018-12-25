@@ -104,18 +104,18 @@ public class UserDataServiceImpl implements UserDataService {
                     UserData userData = new UserData();
                     userData.setCreditOrganization(creditOrganizationRepository.getOne(Long.parseLong(row.getCell(0).getStringCellValue())))
                             .setScore(scoreRepository.getOne(Long.parseLong(row.getCell(1).getStringCellValue())))
-                            .setIncomingBalancesInRubles(row.getCell(2).getStringCellValue())
-                            .setIncomingBalancesDragMetals(row.getCell(3).getStringCellValue())
-                            .setIncomingBalancesOfTotal(row.getCell(4).getStringCellValue())
-                            .setTurnoversDebitInRubles(row.getCell(5).getStringCellValue())
-                            .setTurnoversDebitDragMetals(row.getCell(6).getStringCellValue())
-                            .setTurnoversDebitOfTotal(row.getCell(7).getStringCellValue())
-                            .setTurnoversCreditInRubles(row.getCell(8).getStringCellValue())
-                            .setTurnoversCreditDragMetals(row.getCell(9).getStringCellValue())
-                            .setTurnoversCreditOfTotal(row.getCell(10).getStringCellValue())
-                            .setOutgoingBalancesInRubles(row.getCell(11).getStringCellValue())
-                            .setOutgoingBalancesDragMetals(row.getCell(12).getStringCellValue())
-                            .setOutgoingBalancesOfTotal(row.getCell(13).getStringCellValue());
+                            .setIncomingBalancesInRubles((long) row.getCell(2).getNumericCellValue())
+                            .setIncomingBalancesDragMetals((long) row.getCell(3).getNumericCellValue())
+                            .setIncomingBalancesOfTotal(row.getCell(4).getNumericCellValue())
+                            .setTurnoversDebitInRubles((long) row.getCell(5).getNumericCellValue())
+                            .setTurnoversDebitDragMetals((long) row.getCell(6).getNumericCellValue())
+                            .setTurnoversDebitOfTotal(row.getCell(7).getNumericCellValue())
+                            .setTurnoversCreditInRubles((long) row.getCell(8).getNumericCellValue())
+                            .setTurnoversCreditDragMetals((long) row.getCell(9).getNumericCellValue())
+                            .setTurnoversCreditOfTotal(row.getCell(10).getNumericCellValue())
+                            .setOutgoingBalancesInRubles((long) row.getCell(11).getNumericCellValue())
+                            .setOutgoingBalancesDragMetals((long) row.getCell(12).getNumericCellValue())
+                            .setOutgoingBalancesOfTotal(row.getCell(13).getNumericCellValue());
 
                     userDataSet.add(userData);
 

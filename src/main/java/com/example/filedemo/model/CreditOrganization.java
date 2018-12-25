@@ -19,10 +19,10 @@ public class CreditOrganization {
 
     //Регистрационный номер кредитной организации
     @Id
-    @Column(name = "id")
+    @Column(name = "id", nullable = false)
     private long id;
 
     //Наименование кредитной организации
-    @Column(name = "credit_organization_name")
+    @Column(name = "credit_organization_name", nullable = false)
     private String creditOrganizationName;
 }

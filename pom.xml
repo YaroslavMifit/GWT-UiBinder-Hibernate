@@ -6,7 +6,7 @@
 	<groupId>com.example</groupId>
 	<artifactId>file-demo</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 
 	<name>file-demo</name>
 	<description>Spring Boot File Upload / Download Demo</description>
@@ -113,6 +113,7 @@
 	</dependencies>
 
 	<build>
+		<finalName>${artifactId}</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
